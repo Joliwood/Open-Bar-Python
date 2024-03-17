@@ -1,0 +1,79 @@
+[gd_scene load_steps=13 format=3 uid="uid://bjbrfvi8vcs8b"]
+
+[ext_resource type="PackedScene" uid="uid://b4yu8ep255l7x" path="res://assets/bar_V2.glb" id="1_228jk"]
+[ext_resource type="PackedScene" uid="uid://dtmb8gm2brw03" path="res://assets/table.glb" id="2_es53t"]
+[ext_resource type="Script" path="res://Barman_container.gd" id="3_8ha0a"]
+[ext_resource type="PackedScene" uid="uid://gyeb4vxw1oj" path="res://barman.tscn" id="6_eae6w"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ca3g7"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_84iyt"]
+sky_material = SubResource("ProceduralSkyMaterial_ca3g7")
+
+[sub_resource type="Environment" id="Environment_sk44v"]
+background_mode = 2
+sky = SubResource("Sky_84iyt")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_j32t0"]
+
+[sub_resource type="FogMaterial" id="FogMaterial_1rt56"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h5636"]
+next_pass = SubResource("FogMaterial_1rt56")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_4dqt6"]
+data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2exa4"]
+
+[node name="World" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_sk44v")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="bar_V2" parent="." instance=ExtResource("1_228jk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.102555, -0.158341, 0.0850115)
+
+[node name="table" parent="." instance=ExtResource("2_es53t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.47617, -1.90735e-06, -4.81649)
+
+[node name="table2" parent="." instance=ExtResource("2_es53t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.437908, 0, -4.69605)
+
+[node name="table3" parent="." instance=ExtResource("2_es53t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5451, 0, 0.414943)
+
+[node name="Sol" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.541022, 0, 14.9902, 0, 15, 0, -14.9902, 0, -0.541022, 2.08165e-12, -0.0159267, 2.08165e-12)
+mesh = SubResource("PlaneMesh_j32t0")
+surface_material_override/0 = SubResource("StandardMaterial3D_h5636")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Sol"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sol/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_4dqt6")
+
+[node name="Barman_container" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00326496, 0)
+script = ExtResource("3_8ha0a")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Barman_container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.970748, 0)
+shape = SubResource("CapsuleShape3D_2exa4")
+
+[node name="barman_v3" parent="Barman_container" instance=ExtResource("6_eae6w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00326496, 0)
+
+[node name="Camera" type="Node3D" parent="Barman_container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.8, 2.08165e-12)
+
+[node name="Camera3D" type="Camera3D" parent="Barman_container/Camera"]
+transform = Transform3D(0.707107, -0.590327, 0.389249, 1.92e-16, 0.550481, 0.834848, -0.707107, -0.590327, 0.389249, 2.82931, 3.84813, 3.26823)
